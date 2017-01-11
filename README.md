@@ -1,0 +1,1 @@
+This repo will (with time) contain a variety of write-ups about topics in Swift, as far as I understand them.  I am not an expert, but I hope to provide something of value.
