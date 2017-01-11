@@ -1,0 +1,70 @@
+MainMenu.xib has no window
+
+MainWindowController.xib is not a custom Class
+TextWindowController.xib   "              "
+
+Start by making a new Xcode project:
+macOS Cocoa Application
+no tests
+
+Copy AppDelegate code (comment out TextWindow)
+
+Hillegass:
+
+Construct MainWindowController.xib
+Select Sudokublocks3 folder
+File -> New -> File OS X Source Cocoa Class
+MainWindowController
+subclass of NSWindowController, create XIB file, Swift
+
+Place in the window a custom view:  don't set the class yet.
+
+Add new Cocoa class MyView: NSView
+
+set to MyView class in the XIB file
+
+let backgroundColor = NSColor.whiteColor()
+backgroundColor.set()
+NSBezierPath.fillRect(bounds)
+
+gives an error b/c colors have changed
+
+let backgroundColor = NSColor.white
+backgroundColor.set()
+NSBezierPath.fill(bounds)
+
+need to connect AppDelegate to the window
+most steps from Hillegass were good
+this was not:
+let mainWindowController = MainWindowController(windowNibName: "MainWindowController")
+
+part in parentheses was missing!
+now it gives me the green view
+
+still have an error for no instance variable for the window.
+uncomment the IBOutlet part for now
+
+set the size of MyView to 620 x 620
+the window is 900 x 675
+set it back to white background
+
+add code to MyView
+
+add to Project:
+Plotter.swift
+PlotUtilities.swift
+
+lots of errors...
+
+Trying to load and draw a puzzle.
+Comment out all UI stuff, Hints, etc.
+Fixed 50 or so errors, and finally got it to draw the dividers, 
+then a first puzzle.
+
+Save this as .v1
+
+Now add the rest of the files and fix all those errors as well.
+Comment out UI if necessary.
+
+Then, start hooking up buttons etc.
+
