@@ -8,6 +8,7 @@ Start by just trying to print a random object like a simple struct:
 
 ```css
 import Foundation
+
 struct S {
     var name: String
     init(_ input: String) { name = input }
@@ -16,9 +17,9 @@ let s1 = S("Joe")
 print("\(s1)", terminator: "")
 // prints: "S(name: "Joe")"
 ```
-When we called ``print``, Swift constructed a string that describes something about the struct and the variables it contains.  
+When we called **print**, Swift constructed a String that describes something about the struct and its variables.  
 
-To customize this, simply make the class conform to **CustomStringConvertible**
+To customize this, make the class conform to **CustomStringConvertible**
 
 ```css
 extension S: CustomStringConvertible {
@@ -34,22 +35,23 @@ print("\(s2))", terminator: "")
 ```
 #### Custom protocol
 
-A protocol declaration simply lists the functions, or whatever the official name is for **description** is above (property?), which a conforming type needs to implement:
+A protocol declaration simply lists the functions, or the official name for **description** above (property), which a conforming type needs to implement:
 
 ```css
 protocol Incrementable { func addOne() }
 class X: Incrementable {
     var i = 1
-    func addOne() { i += 1 }
+    func addOne() { 
+        i += 1 
+    }
 }
+
 let x = X()
 print(x.i)  // prints: 1
 x.addOne()
 print(x.i)  // prints: 2
 ```
 Note that the function **addOne** doesn't have to do *anything*.  It could be empty brackets ``{ }``.
-
-I am scrunching up the formatted code a bit to save space.
 
 ### Equatable
 
@@ -105,10 +107,14 @@ class FibonacciIterator: IteratorProtocol {
     var current = (1,1)
     var endIndex: Int
     var currentIndex = 0
-    init(size: Int) { endIndex = size }
+    init(size: Int) { 
+        endIndex = size 
+    }
     
     func next() -> Int? {
-        guard currentIndex < endIndex else { return nil }
+        guard currentIndex < endIndex else { 
+            return nil 
+        }
         currentIndex += 1
         let ret = current.0
         current = (current.1, current.0 + current.1)
@@ -164,12 +170,46 @@ class FibonacciSequence: Sequence {
 
 let a = Array(FibonacciSequence(size: 10))
 a
-for n in a { print(n) }
+for n in a { 
+    print(n) 
+}
 ```
 
 As you can see, all the class needs to be a Sequence is to implement **makeIterator()**.  
 
 Now, we can turn the sequence into an Array, or iterate over it using ``for n in a``.
+
+The same thing can be achieved more compactly as follows:
+
+```css
+import Foundation
+class CompactFibonacciSequence : Sequence {
+    var endIndex:Int
+    init(end:Int){ 
+        endIndex = end
+    }
+    
+    func makeIterator() -> AnyIterator<Int> {
+        var current = (1,1)
+        var currentIndex = 0
+        
+        return AnyIterator{
+            guard currentIndex < self.endIndex else {
+                return nil
+            }
+            currentIndex += 1
+            let ret = current.0
+            current = (current.1,current.0+current.1)
+            return ret
+        }
+    }
+}
+
+let seq = CompactFibonacciSequence(end: 10)
+let a = Array(seq)  // [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+```
+
+I don't know much about **AnyIterator**, but it does simplify the code a lot.
 
 ### Countdown
 
@@ -196,11 +236,11 @@ let a = Array(threeToGo)
 a  // [3, 2, 1]
 ```
 
-What is a little bit wild is to look at what the documentation says about Sequence:  [link](https://developer.apple.com/reference/swift/sequence)
+What the documentation says about Sequence [here](https://developer.apple.com/reference/swift/sequence) is a little bit wild.
 
 There are actually 12 protocol "requirements", but nearly all of them are provided by default.  We don't need to implement them.
 
-So, for example we can do this now:
+Now **contains**, **filter**, **map**, and several others are provided for us.
 
 ```css
 threeToGo.contains(3)  // true
@@ -222,5 +262,5 @@ a2 // [4, 3, 2]
 
 It is certainly possible to get more sophisticated than these examples, but this is a good start on what a Sequence or Iterator is in Swift.
 
-If you want to see more about this topic, I recommend  [link](https://www.uraimo.com/2015/11/12/experimenting-with-swift-2-sequencetype-generatortype/)
+If you want to see more about this topic, I recommend  [this](https://www.uraimo.com/2015/11/12/experimenting-with-swift-2-sequencetype-generatortype/).
 
