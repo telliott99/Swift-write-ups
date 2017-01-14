@@ -1,8 +1,6 @@
-## Multiple files with code --- frameworks
+## Multiple files:  modules and frameworks
 
 Even for small projects, it is nice to have the ability to split up your code into several files.
-
-For example, I put the latest versions of a bunch of utility functions for dealing with data (that is [UInt8]) into the **DataHelper** framework.  I'll introduce them briefly at the end.
 
 In Swift, we can do this in different ways.  Three that we discuss here are:  working from the command line, adding resources to a Playground, or making a framework.
 
@@ -10,7 +8,7 @@ In Swift, we can do this in different ways.  Three that we discuss here are:  wo
 
 **stringStuff.swift**:
 
-```css
+```swift
 import Foundation
 
 extension String {
@@ -25,14 +23,14 @@ extension String {
 
 **main.swift**:
 
-```css
+```swift
 var s = "a$b#c."
 print(s.stripCharacters(input: "$#."))
 ```
 
 This name for the main file is required.  On the command line:
 
-```css
+```bash
 > swiftc stringStuff.swift main.swift -o prog && ./prog
 abc
 >
@@ -75,7 +73,7 @@ To use the new Framework
 
 **x.swift**:
 
-```css
+```swift
 import StringStuff
 var s = "a$b#c"
 print(s.stripCharacters(input: "$#"))
@@ -83,13 +81,13 @@ print(s.stripCharacters(input: "$#"))
 
 From the command line:
 
-```css
+```bash
 xcrun swiftc x.swift -F ~/Library/Frameworks -sdk $(xcrun --show-sdk-path --sdk macosx)
 ```
 
 This should work but fails with an error:
 
-```css
+```bash
 x.swift:1:8: error: module file's minimum deployment target is OS X v10.12: /Users/telliott_admin/Library/Frameworks/StringStuff.framework/Modules/StringStuff.swiftmodule/x86_64.swiftmodule
 import StringStuff
        ^
@@ -111,13 +109,13 @@ Some good advice, which I found [here](http://onebigfunction.com/tools/2015/02/0
 
 One of the very first flags to the compiler is
 
-```css
+```bash
 -target x86_64-apple-macosx10.12
 ```
 
 Let's try it:
 
-```css
+```bash
 > xcrun swiftc x.swift -F ~/Library/Frameworks -sdk $(xcrun --show-sdk-path --sdk macosx) -target x86_64-apple-macosx10.12
 > ./x
 abc
@@ -126,9 +124,12 @@ abc
 
 It works!
 
-The **DataHelper** framework is in ``~/Library/Frameworks``.  Just make a new Xcode project that is a Framework and place in it a Swift file with the functions you want to make available.  Mine has
 
-```css
+I put the latest versions of some utility functions for dealing with data (that is,  [UInt8]) into the **DataHelper** framework.
+
+The **DataHelper** framework is in ``~/Library/Frameworks``.  Just make a new Xcode project that is a Framework and place in it a Swift file with the functions you want to make available.  Mine has functions with these signatures:
+
+```swift
 public func byteToHex(_ input: UInt8) -> String
 public func byteArrayToHex(_ input: [UInt8], 
         withSpaces: Bool = false) -> String
@@ -166,7 +167,7 @@ I wrote a small class
 
 **Test.swift**:
 
-```css
+```swift
 import Cocoa
 import DataHelper
 
@@ -186,11 +187,13 @@ class BinaryData: CustomStringConvertible {
 }
 ```
 
-One detail is that the import of DataHelper must be in the same file, doing the import in the AppDelegate doesn't work.  Also, we have a minimal example of a "convenience" **init** function.
+One detail is that the import of DataHelper must be in the same file as where the function(s) are called, doing the import in the AppDelegate doesn't work.  
+
+Also, here we have a minimal example of a "convenience" **init** function.
 
 Put this code into either the **AppDelegate** or **Text.swift**
 
-```css
+```swift
 func test() {
         let d1 = BinaryData([1,2,255])
         print(d1)
@@ -201,14 +204,14 @@ func test() {
 
 When built and run, it will log:
 
-```css
+```bash
 0x0102ff
 0x0affed25
 ```
 
 as expected.  To use the Framework from the command line, do **import DataHelper**, call **testDataHelper()** from a file **test.swift** and then do:
 
-```css
+```bash
 > xcrun swiftc test.swift -F ~/Library/Frameworks -sdk $(xcrun --show-sdk-path --sdk macosx) -target x86_64-apple-macosx10.12  && ./test
 0a
 0x0001ff4d60
