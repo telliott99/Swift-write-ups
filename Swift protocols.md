@@ -1,12 +1,12 @@
-## Sequence
+## Protocols
 
-This write-up is an elementary introduction to *protocols* in Swift, including the IteratorProtocol and the Sequence protocol. 
+This write-up is a simple introduction to *protocols* in Swift.  After this introduction, we will look at the IteratorProtocol and the Sequence protocol in the second installment. 
 
-#### Your object printed here
+#### CustomStringConvertible:  your object printed here
 
 Start by just trying to print a random object like a simple struct:
 
-```css
+```swift
 import Foundation
 
 struct S {
@@ -21,7 +21,7 @@ When we called **print**, Swift constructed a String that describes something ab
 
 To customize this, make the class conform to **CustomStringConvertible**
 
-```css
+```swift
 extension S: CustomStringConvertible {
     var description : String {
         get {
@@ -37,7 +37,7 @@ print("\(s2))", terminator: "")
 
 A protocol declaration simply lists the functions, or the official name for **description** above (property), which a conforming type needs to implement:
 
-```css
+```swift
 protocol Incrementable { func addOne() }
 class X: Incrementable {
     var i = 1
@@ -55,9 +55,9 @@ Note that the function **addOne** doesn't have to do *anything*.  It could be em
 
 ### Equatable
 
-The Equatable protocol requires implementing a comparison for equality, naturally enough.
+The ``Equatable`` protocol requires implementing a comparison for equality, naturally enough.
 
-```css
+```swift
 struct Complex {
     let real: Double
     let imag: Double
@@ -79,7 +79,7 @@ The appearance of the special definition of the ``==`` operator outside any clas
 
 Note:  the code I copied for the above example had generics in it.  I am not sure of the advantages, but I put that here for completeness.
 
-```css
+```swift
 struct Complex<T: SignedNumber> {
     let real: T
     let imag: T
@@ -98,11 +98,53 @@ a == b // true
 a != b // false
 ```
 
+### Comparable
+
+The ``Comparable`` protocol is used for types that have an inherent order, such as numbers and strings.
+
+``Comparable`` "extends" ``Equatable``, which means that anything that conforms to the first also satisfies the second requirement.
+
+To be ``Comparable`` we must implement the two operators: ``==`` and ``<``.  The standard library will then give us default implementations of everything else, like ``!=`` and ``>``.
+
+Here is the example in the docs:
+
+```swift
+import Cocoa
+
+struct Date {
+    let year: Int
+    let month: Int
+    let day: Int
+}
+
+extension Date: Comparable {
+    static func == (lhs: Date, rhs: Date) -> Bool {
+        return lhs.year == rhs.year 
+        && lhs.month == rhs.month 
+        && lhs.day == rhs.day
+    }
+    
+    static func < (lhs: Date, rhs: Date) -> Bool {
+        if lhs.year != rhs.year {
+            return lhs.year < rhs.year
+        } else if lhs.month != rhs.month {
+            return lhs.month < rhs.month
+        } else {
+            return lhs.day < rhs.day
+        }
+    }
+}
+
+let today =     Date(year: 2017, month: 1, day: 14)
+let yesterday = Date(year: 2017, month: 1, day: 13)
+today > yesterday   // true
+```
+
 ### IteratorProtocol
 
 The IteratorProtocol requires that the conforming type implement **next()**.  We use the Fibonacci numbers as the example.
 
-```css
+```swift
 class FibonacciIterator: IteratorProtocol {
     var current = (1,1)
     var endIndex: Int
@@ -130,7 +172,7 @@ while let fib = f.next() {
 
 In the Swift interpreter, this prints the familiar sequence:
 
-```css
+```bash
 1
 1
 2
@@ -145,7 +187,7 @@ In the Swift interpreter, this prints the familiar sequence:
 
 In the interpreter, we get some interesting information about ``f``
 
-```
+```swift
 f: Fibonacci = {
   current = {
     0 = 89
@@ -159,7 +201,7 @@ f: Fibonacci = {
 
 To actually do ``for n in array`` and turn the numbers into an array and so on, we need to be a Sequence.
 
-```css
+```swift
 class FibonacciSequence: Sequence {
     var endIndex: Int
     init(size: Int) { endIndex = size }
@@ -181,7 +223,7 @@ Now, we can turn the sequence into an Array, or iterate over it using ``for n in
 
 The same thing can be achieved more compactly as follows:
 
-```css
+```swift
 import Foundation
 class CompactFibonacciSequence : Sequence {
     var endIndex:Int
@@ -215,7 +257,7 @@ I don't know much about **AnyIterator**, but it does simplify the code a lot.
 
 The Apple example for Sequence combines these two approaches.  We declare a class that conforms to both protocols, but all the class needs to implement is **next()**.
 
-```css
+```swift
 struct Countdown:  Sequence, IteratorProtocol {
     var count: Int
     mutating func next() -> Int? {
@@ -242,7 +284,7 @@ There are actually 12 protocol "requirements", but nearly all of them are provid
 
 Now **contains**, **filter**, **map**, and several others are provided for us.
 
-```css
+```swift
 threeToGo.contains(3)  // true
 
 func isOdd (input: Int) -> Bool {
@@ -264,3 +306,36 @@ It is certainly possible to get more sophisticated than these examples, but this
 
 If you want to see more about this topic, I recommend  [this](https://www.uraimo.com/2015/11/12/experimenting-with-swift-2-sequencetype-generatortype/).
 
+### Strideable
+
+From [here](http://stackoverflow.com/questions/27024603) and updated by me for Swift3.
+
+```swift
+final class Foo: Strideable {
+    var value: Int = 0
+    init(_ newValue: Int) { value = newValue }
+    
+    func distance(to other: Foo) -> Int {
+        return other.value - value
+    }
+    func advanced(by n: Int) -> Foo {
+        return Foo(value + n)
+    }
+}
+
+func ==(x: Foo, y: Foo) -> Bool { return x.value == y.value }
+func <(x: Foo, y: Foo) -> Bool { return x.value < y.value }
+
+let a = Foo(10)
+let b = Foo(20)
+
+for c in stride(from: a, to: b, by: 1) {
+    print(c.value)
+}
+```
+
+The debug log prints the integers 10 through 19.
+
+``Strideable`` extends ``Comparable``, providing the additional functions ``distanceTo`` and ``advancedBy``.
+
+The class must be ``final`` (not sub-classable) for this to work.  The hints given when ``final`` is missing suggest substituting ``Self`` in ``advanced`` but when I tried that, the compiler complains that you must cast the returned value to ``Self``.  However, that crashes.

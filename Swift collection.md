@@ -4,7 +4,7 @@ This write-up is an elementary introduction to the **Collection** protocol in Sw
 
 #### minimal working example
 
-```css
+```swift
 import Foundation
 
 struct S<T>:  Collection {
@@ -34,7 +34,7 @@ s.data      // [4, 3, 2, 1]
 
 Here is a minimal working example.  Commenting out the function ``index`` gives the error:
 
-```css
+```swift
 Type 'S<T>' does not conform to the protocol 'IndexableBase'
 ```
 
@@ -42,7 +42,7 @@ Removing ``subscript`` gives the same error.
 
 Even with this simple code example, we get a number of  methods "for free."  We get ``sorted``
 
-```css
+```swift
 s.data      // [4, 2, 3, 1]
 s.sorted()  // [1, 2, 3, 4]
 s.count     // 4
@@ -58,7 +58,7 @@ One change we can make is to recognize that it is usual to call the type ``Eleme
 
 To be a **RandomAccessCollection**, we must add ``index(before:``
 
-```css
+```swift
     func index(before i: Int) -> Int {
         return data.index(before: i)
     }
@@ -66,7 +66,7 @@ To be a **RandomAccessCollection**, we must add ``index(before:``
 
 To be a **MutableCollection**, we need to add a setter to ``subscript``
 
-```css
+```swift
     subscript(position: Int) -> Element {
         get {
             return data[position]
@@ -85,7 +85,7 @@ I found the answer [here](http://stackoverflow.com/questions/38810405).
 
 To diagnose the problem, it was useful to run the code as a script from the command line
 
-```
+```bash
 swift test.swift
 ```
 
@@ -93,13 +93,13 @@ The error messages were much more informative and suggested how to fix the code.
 
 It turns out that we need two things.  The first is a ``typealias``
 
-```css
+```swift
 typealias Indices = Array<Element>.Indices
 ``` 
 
 and then also, a version of subscript that takes a **Range**.  Here is the final version of the collection, evaluated in a Playground.
 
-```css
+```swift
 import Foundation
 
 struct S<Element>: MutableCollection,
@@ -156,13 +156,15 @@ So there you have it, the minimal example for a **Collection**, a **MutableColle
 
 #### So what's with the *typealias*?
 
-```css
+```swift
 typealias Indices = Array<Element>.Indices
 ```
 
 Apparently somewhere there is code like:
 
-```css
+```swift
 protocol MutableCollection {
     typealias Indices: _______
 ```
+
+Note that, I follow the example in using ``Array<Element>.Indices``.  For a simple ``Collection``, an ``Int`` would work just fine.  I'm not sure of the difference, at the moment.
