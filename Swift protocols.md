@@ -24,15 +24,16 @@ To customize this, make the class conform to **CustomStringConvertible**
 ```swift
 extension S: CustomStringConvertible {
     var description : String {
-        get {
-            return "S:  \(name)"
-        }
+        return "S:  \(name)"
     }
 }
 let s2 = S("Jim")
 print("\(s2))", terminator: "")
 // prints:  "S:  Jim"
 ```
+
+[Note](https://github.com/raywenderlich/swift-style-guide#use-of-self):  ``get`` is only needed when there is also a ``set``.  So don't use ``get`` above.
+
 #### Custom protocol
 
 A protocol declaration simply lists the functions, or the official name for **description** above (property), which a conforming type needs to implement:
@@ -258,8 +259,11 @@ I don't know much about **AnyIterator**, but it does simplify the code a lot.
 The Apple example for Sequence combines these two approaches.  We declare a class that conforms to both protocols, but all the class needs to implement is **next()**.
 
 ```swift
-struct Countdown:  Sequence, IteratorProtocol {
+struct Countdown {
     var count: Int
+}
+
+extension Countdown:  Sequence, IteratorProtocol {
     mutating func next() -> Int? {
         if count == 0 {
             return nil
@@ -305,37 +309,3 @@ a2 // [4, 3, 2]
 It is certainly possible to get more sophisticated than these examples, but this is a good start on what a Sequence or Iterator is in Swift.
 
 If you want to see more about this topic, I recommend  [this](https://www.uraimo.com/2015/11/12/experimenting-with-swift-2-sequencetype-generatortype/).
-
-### Strideable
-
-From [here](http://stackoverflow.com/questions/27024603) and updated by me for Swift3.
-
-```swift
-final class Foo: Strideable {
-    var value: Int = 0
-    init(_ newValue: Int) { value = newValue }
-    
-    func distance(to other: Foo) -> Int {
-        return other.value - value
-    }
-    func advanced(by n: Int) -> Foo {
-        return Foo(value + n)
-    }
-}
-
-func ==(x: Foo, y: Foo) -> Bool { return x.value == y.value }
-func <(x: Foo, y: Foo) -> Bool { return x.value < y.value }
-
-let a = Foo(10)
-let b = Foo(20)
-
-for c in stride(from: a, to: b, by: 1) {
-    print(c.value)
-}
-```
-
-The debug log prints the integers 10 through 19.
-
-``Strideable`` extends ``Comparable``, providing the additional functions ``distanceTo`` and ``advancedBy``.
-
-The class must be ``final`` (not sub-classable) for this to work.  The hints given when ``final`` is missing suggest substituting ``Self`` in ``advanced`` but when I tried that, the compiler complains that you must cast the returned value to ``Self``.  However, that crashes.
