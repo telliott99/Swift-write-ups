@@ -20,10 +20,4 @@ retro-fit older code to Swift3 on topics related to binary data and encryption.
 * Swift protocols
 * Swift collections
 
-<<<<<<< HEAD
 work through some issues that I've run into with writing my own Sequences and Collections.
-
-I hope you find it useful.
-=======
-work through some issues that I've run into with writing my own Sequences and Collections.
->>>>>>> rewrite README
