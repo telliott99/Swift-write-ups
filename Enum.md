@@ -57,9 +57,7 @@ enum Math: Double {
   case e  = 2.718281828
 }
 
-let pi = Math.pi.rawValue
-
-let x = pi * 2 * 2
+let x = Math.pi.rawValue * 2 * 2
 print("\(x)")
 ```
 
@@ -67,17 +65,6 @@ print("\(x)")
 > swift test.swift
 12.5663706
 > 
-```
-
-```swift
-enum Language: String {
-    case Swift
-    case ObjC = "Objective-C"
-    case C
-}
-
-let lang = ProgrammingLanguage.Swift
-print("My favorite is : \(lang)")  // Swift
 ```
 
 Here is an example with more cases:
@@ -157,15 +144,8 @@ Also seen in this example is the additional flexibility of ``switch`` flow contr
 case .qrCode(let productCode):
 ```
 
-Here are some other `enum`` definitions from the docs that I haven't really made into full examples yet:
+Here are some other ``enum`` definitions from the docs that I haven't really made into full examples yet:
 
-```swift
-enum ASCIIControlCharacter: Character {
-    case Tab = "\t"
-    case LineFeed = "\n"
-    case CarriageReturn = "\r"
-}
-```
 ```swift
 enum Planet: Int {
     case Mercury = 1, Venus, Earth, Mars, 

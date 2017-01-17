@@ -1,6 +1,30 @@
 A while ago I ran into a blog [post](http://iosdeveloperzone.com/2014/10/03/using-commoncrypto-in-swift/) about a library (not a framework) called **CommonCrypto** on macOS.  I learned how to use it and wrote several posts of my own.  [Here](http://telliott99.blogspot.com/2015/12/commoncrypto.html) is the first one.
 
-The CommonCrypto library is not available to Swift apps without taking special steps.  One way is to get a "bridging header" into your project.  But a really great hack is the following method.  Make the following file:
+The CommonCrypto library is not available to Swift apps without taking special steps.  One way is to get a "bridging header" into your project.
+
+Make a new Cocoa app in Swift, **MyApp**.  Add a new file to it --- an Objective-C file ``tmp``.  Say yes when Xcode asks if you want a bridging header.  When you're done, delete ``tmp``.  Build it just to be sure everything is fine.
+
+In ``MyApp-Bridging-Header.h``, import what you need, in our case we do 
+
+```objective-c
+#import "CommonCrypto/CommonCrypto.h"
+```
+
+In ``AppDelegate.swift`` we do
+
+```swift
+let n = Int(CC_MD5_DIGEST_LENGTH)
+print(n)
+```
+The Debugger prints:  
+
+```bash
+16
+```
+
+### Fake framework
+
+A really great hack is the following method.  Make the following file:
 
 **module.map**:
 

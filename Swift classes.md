@@ -38,9 +38,13 @@ extension Circle: CustomStringConvertible {
 }
 ```
 
-Although ``self.radius`` would be OK for use in the getter and setter for ``diameter``, or in the function ``area()``, this isn't necessary and should be avoided.  Where it is necessary is in the ``init`` function, since the instance variables and the arguments to ``init`` have the same name.
+Although ``self.radius`` would work for use in the getter and setter for ``diameter``, or in the function ``area()``, this isn't necessary and should be avoided.  
 
-If you have a function (like ``advanced`` for ``Strideable``) that constucts a new value of the class to be returned, its return type should be ``Self``.  ``Self`` is not the same as ``self``. 
+It is necessary is in the ``init`` function, since the instance variables and the parameters to ``init`` have the same name.
+
+If you have a function that constucts a new value of the class to be returned, its return type should be ``Self``.  ``Self`` is not the same as ``self``. 
+
+An example would be ``advanced`` for ``Strideable``.
 
 ```swift
     func advanced(by n: Stride) -> Self {
@@ -48,4 +52,4 @@ If you have a function (like ``advanced`` for ``Strideable``) that constucts a n
     }
 ```
 
-Note that the new value is constructed using ``type(of: self).init``, rather than ``Foo``.  To do the latter, the class must be marked ``final``.
+The new value is constructed using ``type(of: self).init``, rather than ``Foo``.  To do the latter, the class must be marked ``final``.
