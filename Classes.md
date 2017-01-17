@@ -40,7 +40,7 @@ extension Circle: CustomStringConvertible {
 
 Although ``self.radius`` would work for use in the getter and setter for ``diameter``, or in the function ``area()``, this isn't necessary and should be avoided.  
 
-It is necessary is in the ``init`` function, since the instance variables and the parameters to ``init`` have the same name.
+Where it is necessary is in the ``init`` function, since the instance variables and the parameters to ``init`` have the same name.
 
 If you have a function that constucts a new value of the class to be returned, its return type should be ``Self``.  ``Self`` is not the same as ``self``. 
 
