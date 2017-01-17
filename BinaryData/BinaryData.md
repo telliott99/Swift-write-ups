@@ -201,6 +201,24 @@ let b2 = BinaryData(s)
 print(b2)
 ```
 
+### Playground
 
+To work with this in a Playground, make a new Playground.  Make the project navigator visible
+
+![](show_nav.png) 
+
+Then add a new file to it and copy the DataHelper.swift code to the file.
+
+In the Playground, copy the BinaryData.swift code, except for the import statement at the top.
+
+The Debug area logs:
+
+```bash
+0x75e3ad9685cbc7494fdf
+0x75e3ad9685cbc7494fdf
+0x75e3ad9685cbc7494fdf
+```
+
+as expected.
 
 
