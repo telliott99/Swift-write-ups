@@ -161,7 +161,7 @@ a == arr.sorted()     // true
 
 In this screenshot of the animation in the wikipedia article, freezing a late stage in the sort, you can see the division into the sorted part on the left, and the unsorted part on the right, where all values in the unsorted part are larger than those in the sorted port.
 
-![](selectionsort.png)
+![](figs/selectionsort.png)
 
 Note that in the initialization phase:
 
@@ -177,7 +177,7 @@ we set our sentinel value to be the lowest possible value.  If the array were to
 
 As before, the part of the array to the left of the current index is maintained in sorted order.  However, the values to the right of the index are not all larger than the ones to the left.
 
-![](insertionsort.png)
+![](figs/insertionsort.png)
 
 In insertion sort, we move across the array from left to right and simply take the next value as it comes, no matter whether large or small.  For each new value, we determine the correct place to insert it.  
 
