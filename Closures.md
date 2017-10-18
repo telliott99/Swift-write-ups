@@ -34,7 +34,7 @@ The closure is the part contained between curly braces.
 { (s: String) -> (String) in return "\(s)u" }
 ```
 
-The **in** keyword separates two elemens:  the signature (input and output parameters), and the statements that prescribe what is to be done.
+The **in** keyword separates two elements:  the signature (input and output parameters), and the statements that prescribe what is to be done.
 
 Input and output parameters are separated by `->`.
 
@@ -63,7 +63,7 @@ let a2 = a1.map { s in return "\(s)u" }
 If there is only a single statement, then the resulting value is returned and there is no need for an explicit **return**.
 
 ``` swift
-let a2 = a1.map { (s: String) in "\(s)u" }
+let a2 = a1.map { s in "\(s)u" }
 print(a2)           // ["au", "bu", "cu"]
 ```
 
@@ -79,7 +79,7 @@ This is not the very shortest closure.  That consists of a single character, as 
 
 Sort has changed several times during the evolution of Swift.  
 
-There are two methods on arrays that return a sorted copy:  `sorted` and `sorted(by:)`.
+There are currently two methods on arrays that return a sorted copy:  `sorted` and `sorted(by:)`.
 
 ``` swift
 let a = Array(1..<5)
@@ -93,7 +93,7 @@ We can pass `<` (for example):
 b.sorted(by: <)      // [1, 2, 3, 4]
 ```
 
-We can also pass what it is admittedly a convoluted closure:
+We can also pass what is admittedly a convoluted closure:
 
 ``` swift
 b.sorted(by: { (x: Int, y: Int) -> (Bool) in
@@ -102,7 +102,7 @@ b.sorted(by: { (x: Int, y: Int) -> (Bool) in
 // [2, 4, 3, 1]
 ```
 
-This has the effect of moving all the even values before the odd ones, however, the logic is incorrect for a proper sort.  If wee needed to fix that:
+This has the effect of moving all the even values before the odd ones, however, the logic is incorrect for a proper sort.  If we want to fix that:
 
 ``` swift
 b.sorted(by: { (x: Int, y: Int) -> (Bool) in
@@ -118,7 +118,7 @@ b.sorted(by: { (x: Int, y: Int) -> (Bool) in
 
 #### Capturing values (closure)
 
-A classic example of a closure is a function that increments an input integer by adding a constant value. 
+A classic demonstration example of a closure is a function that increments an input integer by adding a constant value. 
 
 ``` swift
 func f(_ n: Int) -> ((Int) -> (Int)) {
@@ -139,7 +139,7 @@ says we are returning a function that takes an `Int` and yields an `Int`.
 
 Calling `f` with the input `n = 10` yields a function that when called with the input `m = 1` gives the result `11`.
 
-We can streamline this a little bit by defining a typealias for the function type:
+We can streamline this a little bit by defining a typealias for the function signature:
 
 ``` swift
 typealias itr = ((Int) -> (Int))
@@ -282,7 +282,9 @@ sp.begin(completionHandler: { (result: Int) -> Void in
 } )
 ```
 
-Here, the call to the save panel to `begin` includes a callback (completionHandler).  The save panel generates an Int result which is fed to the completionHandler.  If that Int corresponds to the 
+Here, the call to the save panel to `begin` includes a callback (completionHandler) which is a closure.  
+
+The save panel generates an Int result which is fed to the completionHandler.  If that Int corresponds to the 
 
 ``` swift
 NSFileHandlingPanelOKButton
@@ -388,7 +390,7 @@ xxxo
 * Implement a function combineArrays that takes 2 arrays and a closure that combines 2 Ints into a single Int. The function combines the two arrays into a single array using the provided closure. Assume that the 2 arrays have equal length.
 
 ``` swift
-let a = Array(1...4)      // length mismatch
+let a = Array(1...4)      // length mismatch caught below
 let b = Array(11...13)
 
 typealias typ = ((Int,Int) -> (Int)) 
