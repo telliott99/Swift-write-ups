@@ -1,5 +1,5 @@
 
-Historically, enumerations or ``enum``'s are a way to pass around an integer as a code for something, in a type-safe way.  From the Objective-C docs:
+Historically, an enumeration (or the ``enum`` type) is a way to pass around an integer as a code for something, in a type-safe way.  From the Objective-C docs:
 
 ```objc
 enum {
@@ -12,19 +12,22 @@ enum {
 typedef NSUInteger NSStringEncoding;
 ```
 
-In the actual call to a string method, what will be passed in an NSUInteger, but the compiler makes sure your code uses  ``NSUTF8StringEncoding`` rather than 4.
+In the actual call to a string method, what will be passed is an NSUInteger, but the compiler makes sure your code uses  ``NSUTF8StringEncoding`` rather than 4.
 
 ```swift
-// one-liner variant
-enum CoinFlip { case heads, tails }
+enum CoinFlip {
+    case heads
+    case tails
+}
 
-var flip: CoinFlip.heads
+var flip: CoinFlip
 flip = .tails
 if flip == .tails { print("tails") }
+
 \\ prints 'tails'
 ```
 
-The shorthand ``.tails`` can be used because the compiler is able to deduce that the type of ``flip`` is ``CoinFlip`` from its declaration/definition ``var flip = CoinFlip.heads``.
+The shorthand ``.tails`` can be used because the compiler is able to deduce that the type of ``flip`` is ``CoinFlip`` from its declaration/definition ``var flip = CoinFlip``.
 
 Note:  prior to Swift3 the cases were capitalized, but not any more.
 
@@ -40,8 +43,8 @@ enum ASCIIControlCharacter: Character {
 let c = ASCIIControlCharacter.tab
 
 switch c {
-case .tab(let value):
-    print("tab: \(value)")
+case .tab :
+    print("tab: \(.tab as ASCIIControlCharacter)")
 default:
     print("not tab")
 }

@@ -252,6 +252,20 @@ or just
 numbers.reduce(0, +)             // 15
 ```
 
+#### Swift4 String example
+
+[source](https://www.raywenderlich.com/163857/whats-new-swift-4)
+
+```
+let s = "abc😀"
+let t = s.filter { char in
+    let isASCII = char.unicodeScalars.reduce(
+        true, { $0 && $1.isASCII })
+    return isASCII
+}
+// abc
+```
+
 #### File save
 
 ``` swift
